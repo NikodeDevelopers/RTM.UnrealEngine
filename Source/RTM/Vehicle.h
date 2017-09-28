@@ -9,29 +9,31 @@
 UCLASS()
 class RTM_API AVehicle : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AVehicle();
+    GENERATED_BODY()
 
-    UPROPERTY(VisibleAnywhere, Category = "Dynamics")
-        FVector speed_;
-    UPROPERTY(EditDefaultsOnly, Category = "Dynamics")
-        int maxSpeedBoost;
-    UPROPERTY(EditDefaultsOnly, Category = "Dynamics")
+public:
+    // Dynamics
+    UPROPERTY(Category = "Dynamics", EditDefaultsOnly) 
         int maxSpeed;
-    UPROPERTY(EditDefaultsOnly, Category = "Dynamics")
-        int maxBrakingBoost;
+    UPROPERTY(Category = "Dynamics", EditDefaultsOnly) 
+        int speedAcceleration;
+    UPROPERTY(Category = "Dynamics", EditDefaultsOnly) 
+        int brakingAcceleration;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Vector of speed
+    FVector speed_;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+    // Sets default values for this actor's properties
+    AVehicle();
 
-	
-	
+protected:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+
+public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
+
 };
