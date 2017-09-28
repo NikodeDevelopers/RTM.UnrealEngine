@@ -5,7 +5,7 @@
 
 // Sets default values
 AVehicle::AVehicle()
-    : maxSpeed(25)
+    : maxSpeed(21)
     , speedAcceleration(2)
     , brakingAcceleration(7)
     , speed_(0, 0, 0)
@@ -23,23 +23,38 @@ void AVehicle::BeginPlay()
 }
 
 // Called every frame
-void AVehicle::Tick(float DeltaTime)
+void AVehicle::Tick(float deltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(deltaTime);
 
-    if (speed_.X < maxSpeed) {
-        speed_.X += speedAcceleration * DeltaTime;
+    // Get position
+    FVector location = GetActorLocation();
+    FRotator rotator = GetActorRotation();
+    
+    // After cross the finish
+    if (location.X > 300) {
+        speed_.X -= brakingAcceleration * deltaTime;
+        if (speed_.X < 0) {
+            speed_.X = 0;
+        }
+    }
+    // Boost
+    else if (speed_.X < maxSpeed) {
+        speed_.X += speedAcceleration * deltaTime;
         if (speed_.X > maxSpeed) {
             speed_.X = maxSpeed;
         }
     }
+    
+    // Move
+    float cosCoeff = FMath::Cos(PI * rotator.Yaw / 180) * deltaTime;
+    float sinCoeff = FMath::Sin(PI * rotator.Yaw / 180) * deltaTime;
+    location.X += speed_.X * cosCoeff + speed_.Y * sinCoeff;
+    location.Y += speed_.Y * cosCoeff + speed_.X * sinCoeff;
+    location.Z += speed_.Z;
 
-    FRotator rotator = GetActorRotation();
-    rotator.Yaw += 30 * DeltaTime;
-
-    FVector newLocation = GetActorLocation();
-    newLocation.X += speed_.X * FMath::Cos(rotator.Yaw) + speed_.Y * FMath::Sin(rotator.Yaw);
-    newLocation.Y += speed_.X * FMath::Sin(rotator.Yaw) + speed_.Y * FMath::Cos(rotator.Yaw);
-    SetActorLocation(newLocation);
+    // Set position
+    SetActorLocation(location);
+    SetActorRotation(rotator);
 }
 

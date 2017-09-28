@@ -20,20 +20,17 @@ public:
     UPROPERTY(Category = "Dynamics", EditDefaultsOnly) 
         int brakingAcceleration;
 
-protected:
-    // Vector of speed
-    FVector speed_;
-
-public:
     // Sets default values for this actor's properties
     AVehicle();
 
-protected:
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-
-public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
+
+protected:
+    // Vector of speed (x - forward, y - lateral, z - FLIGHT)
+    FVector speed_;
+
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
 };
