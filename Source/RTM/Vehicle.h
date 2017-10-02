@@ -14,23 +14,30 @@ class RTM_API AVehicle : public AActor
 public:
     // Dynamics
     UPROPERTY(Category = "Dynamics", EditDefaultsOnly) 
-        int maxSpeed;
+        float maxSpeed;
     UPROPERTY(Category = "Dynamics", EditDefaultsOnly) 
-        int speedAcceleration;
+        float acceleration;
     UPROPERTY(Category = "Dynamics", EditDefaultsOnly) 
-        int brakingAcceleration;
+        float deceleration;
 
     // Sets default values for this actor's properties
     AVehicle();
 
     // Called every frame
-    virtual void Tick(float DeltaTime) override;
+    virtual void Tick(float deltaTime) override;
 
 protected:
-    // Vector of speed (x - forward, y - lateral, z - FLIGHT)
-    FVector speed_;
+    // Speed params
+    float speed_;
+    float helmAngle_;
 
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
+    // Movement
+    void Accelerate(float deltaTime);
+    void Decelerate(float deltaTime);
+
+    // Update coordinates
+    void UpdatePosition(float deltaTime);
 };
