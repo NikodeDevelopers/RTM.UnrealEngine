@@ -20,7 +20,8 @@ AVehicle::AVehicle()
 void AVehicle::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+    helmAngle_ = 30.f;
 }
 
 void AVehicle::Accelerate(float deltaTime)
@@ -51,9 +52,9 @@ void AVehicle::UpdatePosition(float deltaTime)
     FRotator rotator = GetActorRotation();
 
     // Move
-    rotator.Yaw += helmAngle_;
-    location.X += speed_ * FMath::Cos(PI * rotator.Yaw / 180) * deltaTime;
-    location.Y += speed_ * FMath::Sin(PI * rotator.Yaw / 180) * deltaTime;
+    rotator.Yaw += helmAngle_ * deltaTime;
+    location.Y += speed_ * FMath::Cos(PI * rotator.Yaw / 180) * deltaTime;
+    location.X += -1 * speed_ * FMath::Sin(PI * rotator.Yaw / 180) * deltaTime;
 
     // Set position
     SetActorLocation(location);
